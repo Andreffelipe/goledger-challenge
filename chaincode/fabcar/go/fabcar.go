@@ -121,15 +121,13 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 
 func (s *SmartContract) createCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) < 5 {
-		return shim.Error("Incorrect number of arguments. Expecting 5")
-	}
-
 	var car Car
 	if len(args) == 5 {
 		car = Car{Make: args[1], Model: args[2], Colour: args[3], Owner: args[4]}
-	} else {
+	} else if len(args) == 6 {
 		car = Car{Make: args[1], Model: args[2], Colour: args[3], Owner: args[4], Year: args[5]}
+	} else{
+		return shim.Error("Incorrect number of arguments. Expecting 5 or 6")
 	}
 
 	carAsBytes, _ := json.Marshal(car)
